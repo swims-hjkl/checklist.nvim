@@ -3,6 +3,8 @@ local ChecklistItem = require("checklist.checklistItem")
 local ChecklistOperations = require("checklist.checklistOperations")
 local ui = require("checklist.ui")
 
+print("test change")
+
 M = {}
 
 local data_folder = vim.fn.stdpath("data")
