@@ -1,3 +1,4 @@
+local checklist_operations = require("checklist.checklistOperations")
 M = {}
 
 UIBufferId = nil
@@ -5,7 +6,10 @@ UIWindowId = nil
 
 local create_buffer = function()
 	local buffernr = vim.api.nvim_create_buf(false, false)
-	vim.api.nvim_buf_set_keymap(buffernr, "n", "d", "<cmd>lua require('checklist.ui').del()<cr>", { noremap = true })
+	vim.api.nvim_buf_set_keymap(buffernr, "n", "c", "<cmd>lua require('checklist.ui').toggle_completed()<cr>",
+		{ noremap = true })
+	vim.api.nvim_buf_set_keymap(buffernr, "n", "q", "<cmd>lua require('checklist.ui').close_window()<cr>",
+		{ noremap = true })
 	vim.api.nvim_buf_set_option(buffernr, "buftype", "nofile")
 	vim.api.nvim_buf_set_option(buffernr, "swapfile", false)
 	vim.api.nvim_buf_set_option(buffernr, "bufhidden", "delete")
@@ -14,19 +18,56 @@ local create_buffer = function()
 	return buffernr
 end
 
+local save_data = function()
+	print("executing leave funtion")
+	checklist_operations.save_todos_to_storage(M.data_path)
+end
 
 M.close_window = function()
 	vim.api.nvim_win_close(UIWindowId, true)
+	save_data()
+end
+
+M.toggle_completed = function()
+	local line_number = vim.fn.line('.')
+	print(line_number)
+	local checklist_item = M.display_data.todo_list[line_number - 2]
+	checklist_item.completed = not checklist_item.completed
+	vim.api.nvim_buf_set_option(UIBufferId, "modifiable", true)
+	if (checklist_item.completed == false) then
+		vim.api.nvim_buf_set_lines(UIBufferId, line_number - 1, line_number, true,
+			{ "N " .. checklist_item.description })
+		vim.api.nvim_buf_add_highlight(UIBufferId, 0, "ErrorMsg", line_number - 1, 0, 1)
+	else
+		vim.api.nvim_buf_set_lines(UIBufferId, line_number - 1, line_number, true,
+			{ "C " .. checklist_item.description })
+		vim.api.nvim_buf_add_highlight(UIBufferId, 0, "Conditional", line_number - 1, 0, 1)
+	end
+	vim.api.nvim_buf_set_option(UIBufferId, "modifiable", false)
 end
 
 local populate_ui = function()
 	PT(M.display_data)
-	local list_of_strings_to_display = {}
-	for index, item in ipairs(M.display_data) do
-		table.insert(list_of_strings_to_display, item.description)
-	end
 	vim.api.nvim_buf_set_option(UIBufferId, "modifiable", true)
-	vim.api.nvim_buf_set_lines(UIBufferId, 0, #list_of_strings_to_display, false, list_of_strings_to_display)
+	local col_width = vim.fn.winwidth(UIWindowId)
+	print("col_width", col_width)
+	local header_start_col = math.floor(col_width / 2) - math.floor(#M.display_data.display_filter_criteria / 2) - 1
+	print("header_start_col", header_start_col)
+	vim.api.nvim_buf_set_lines(UIBufferId, 0, 1, false,
+		{ string.rep(' ', header_start_col) .. M.display_data.display_filter_criteria, "" })
+	vim.api.nvim_buf_add_highlight(UIBufferId, 0, "TermCursor", 0, header_start_col,
+		header_start_col + #M.display_data.display_filter_criteria)
+	for index, item in ipairs(M.display_data.todo_list) do
+		if (item.completed == false) then
+			vim.api.nvim_buf_set_lines(UIBufferId, index + 1, index + 1, false,
+				{ "N " .. item.description })
+			vim.api.nvim_buf_add_highlight(UIBufferId, 0, "ErrorMsg", index + 1, 0, 1)
+		else
+			vim.api.nvim_buf_set_lines(UIBufferId, index + 1, index + 1, false,
+				{ "C " .. item.description })
+			vim.api.nvim_buf_add_highlight(UIBufferId, 0, "Conditional", index + 1, 0, 1)
+		end
+	end
 	vim.api.nvim_buf_set_option(UIBufferId, "modifiable", false)
 end
 
@@ -43,11 +84,13 @@ local create_window = function(buffernr, start_line, start_col)
 	return win_id
 end
 
+
 M.open = function()
 	local buffernr = create_buffer()
-	local win_id = create_window(buffernr, 0, 50)
+	local win_id = create_window(buffernr, 10, 50)
 	populate_ui()
 end
+
 
 
 return M

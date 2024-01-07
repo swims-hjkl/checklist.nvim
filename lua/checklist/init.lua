@@ -3,21 +3,19 @@ local ChecklistItem = require("checklist.checklistItem")
 local ChecklistOperations = require("checklist.checklistOperations")
 local ui = require("checklist.ui")
 
-print("test change")
-
 M = {}
 
 local data_folder = vim.fn.stdpath("data")
-local data_path = data_folder .. "/checklist_data.json"
+M.data_path = data_folder .. "/checklist_data.json"
 
 M.data = {}
 M.display_data = {}
 
 local set_items = function()
-	if (vim.fn.filereadable(data_path) == 0) then
-		data = path.new(data_path):write(vim.fn.json_encode(M.data), "w")
+	if (vim.fn.filereadable(M.data_path) == 0) then
+		data = path.new(M.data_path):write(vim.fn.json_encode(M.data), "w")
 	else
-		data = vim.fn.json_decode(path.new(data_path):read())
+		data = vim.fn.json_decode(path.new(M.data_path):read())
 	end
 	if (data ~= nil) then
 		for _, item in ipairs(data) do
@@ -30,30 +28,33 @@ local set_items = function()
 end
 
 local set_display_data = function(filter_criteria)
-	print("setting display data")
-	print(filter_criteria)
+	if (filter_criteria == "project") then
+		display_filter_criteria = "Project Related Todos"
+	elseif (filter_criteria == "file") then
+		display_filter_criteriu = "File Related Todos"
+	else
+		display_filter_criteria = "All Todos"
+	end
+	M.display_data["display_filter_criteria"] = display_filter_criteria
+	M.display_data["todo_list"] = {}
 	if (filter_criteria == nil) then
-		print("exec all")
-		M.display_data = M.data
+		M.display_data.todo_list = M.data
 	end
 	if (filter_criteria == "file") then
-		print("exec file")
 		local current_file_path = vim.api.nvim_buf_get_name(0)
-		M.display_data = {}
+		M.display_data.todo_list = {}
 		for _, item in ipairs(M.data) do
 			if (item.file_path == current_file_path) then
-				table.insert(M.display_data, item)
+				table.insert(M.display_data.todo_list, item)
 			end
 		end
 	end
 	if (filter_criteria == "project") then
-		print("exec project")
 		local current_project_path = vim.fn.getcwd()
-		print(current_prject_path)
-		M.display_data = {}
+		M.display_data.todo_list = {}
 		for _, item in ipairs(M.data) do
 			if (item.project_path == current_project_path) then
-				table.insert(M.display_data, item)
+				table.insert(M.display_data.todo_list, item)
 			end
 		end
 	end
