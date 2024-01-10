@@ -6,6 +6,9 @@ M = {}
 
 M.add_todo = function()
 	local description = vim.fn.input("Enter todo one line description: ")
+	if (description == nil) or (description == "") then
+		return nil
+	end
 	local check_list_item = CheckList:newItem(description)
 	table.insert(M.data, check_list_item)
 	return check_list_item.id
