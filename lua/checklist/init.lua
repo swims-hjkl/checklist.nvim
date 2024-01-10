@@ -1,6 +1,6 @@
 local path = require("plenary.path")
 local ChecklistItem = require("checklist.checklistItem")
-local ChecklistOperations = require("checklist.checklistOperations")
+local checklist_operations = require("checklist.checklistOperations")
 local ui = require("checklist.ui")
 
 M = {}
@@ -11,7 +11,9 @@ M.data_path = data_folder .. "/checklist_data.json"
 M.data = {}
 M.display_data = {}
 
-local set_items = function()
+
+local load_data = function()
+	local data = nil
 	if (vim.fn.filereadable(M.data_path) == 0) then
 		data = path.new(M.data_path):write(vim.fn.json_encode(M.data), "w")
 	else
@@ -28,10 +30,11 @@ local set_items = function()
 end
 
 local set_display_data = function(filter_criteria)
+	local display_filter_criteria = nil
 	if (filter_criteria == "project") then
 		display_filter_criteria = "Project Related Todos"
 	elseif (filter_criteria == "file") then
-		display_filter_criteriu = "File Related Todos"
+		display_filter_criteria = "File Related Todos"
 	else
 		display_filter_criteria = "All Todos"
 	end
@@ -60,22 +63,45 @@ local set_display_data = function(filter_criteria)
 	end
 end
 
-M.setup = function()
-	set_items()
-	vim.keymap.set("n", "<Leader>at", ChecklistOperations.add_todo)
-	vim.keymap.set("n", "<Leader>sta", function()
-		set_display_data(nil)
-		ui.open()
-	end)
-	vim.keymap.set("n", "<Leader>stf", function()
-		set_display_data("file")
-		ui.open()
-	end)
-	vim.keymap.set("n", "<Leader>stp", function()
-		set_display_data("project")
-		ui.open()
-	end)
+M.save_data = function()
+	checklist_operations.save_todos_to_storage(M.data_path)
 end
 
-M.setup()
+function M.checklist_add()
+	checklist_operations.add_todo()
+	M.save_data()
+end
+
+function M.checklist_show_all()
+	set_display_data(nil)
+	ui.open()
+end
+
+function M.checklist_show_file()
+	set_display_data("file")
+	ui.open()
+end
+
+function M.checklist_show_project()
+	set_display_data("project")
+	ui.open()
+end
+
+M.setup = function(config)
+	load_data()
+	vim.keymap.set("n", config.add_todo, M.checklist_add)
+	vim.keymap.set("n", config.show_todo_all, M.checklist_show_all)
+	vim.keymap.set("n", config.show_todo_file, M.checklist_show_file)
+	vim.keymap.set("n", config.show_todo_project, M.checklist_show_project)
+end
+
+local config = {
+	add_todo = "<Leader>at",
+	show_todo_all = "<Leader>t",
+	show_todo_project = "<Leader>pt",
+	show_todo_file = "<Leader>ft",
+}
+
+
+M.setup(config)
 return
