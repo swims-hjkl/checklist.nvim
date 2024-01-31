@@ -10,6 +10,5 @@ M.uuid = function()
 	end)
 end
 
-print(M.uuid())
 
 return M

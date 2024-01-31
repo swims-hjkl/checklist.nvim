@@ -48,9 +48,7 @@ local populate_ui = function()
 	vim.api.nvim_buf_set_option(UIBufferId, "modifiable", true)
 	vim.api.nvim_buf_set_lines(UIBufferId, 0, -1, false, {})
 	local col_width = vim.fn.winwidth(UIWindowId)
-	print("col_width", col_width)
 	local header_start_col = math.floor(col_width / 2) - math.floor(#M.display_data.display_filter_criteria / 2) - 1
-	print("header_start_col", header_start_col)
 	vim.api.nvim_buf_set_lines(UIBufferId, 0, 1, false,
 		{ string.rep(' ', header_start_col) .. M.display_data.display_filter_criteria, "" })
 	vim.api.nvim_buf_add_highlight(UIBufferId, 0, "TermCursor", 0, header_start_col,
@@ -71,7 +69,6 @@ end
 
 M.delete_item = function()
 	local delete_confirmation = vim.fn.input("are you sure you want to delete item? (y/n): ")
-	print(string.lower(delete_confirmation))
 	if (string.lower(delete_confirmation) == "y") then
 		local line_number = vim.fn.line('.')
 		local checklist_item = M.display_data.todo_list[line_number - 2]
