@@ -104,4 +104,4 @@ local config = {
 
 
 M.setup(config)
-return
+return M
