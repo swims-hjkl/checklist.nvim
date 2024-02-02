@@ -1,5 +1,5 @@
 local path = require("plenary.path")
-local CheckList = require("checklist.checklistItem")
+local TodoList = require("todolist.todolistItem")
 
 
 M = {}
@@ -9,9 +9,9 @@ M.add_todo = function()
 	if (description == nil) or (description == "") then
 		return nil
 	end
-	local check_list_item = CheckList:newItem(description)
-	table.insert(M.data, check_list_item)
-	return check_list_item.id
+	local todo_list_item = TodoList:newItem(description)
+	table.insert(M.data, todo_list_item)
+	return todo_list_item.id
 end
 
 

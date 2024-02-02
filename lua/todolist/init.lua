@@ -1,12 +1,12 @@
 local path = require("plenary.path")
-local ChecklistItem = require("checklist.checklistItem")
-local checklist_operations = require("checklist.checklistOperations")
-local ui = require("checklist.ui")
+local TodolistItem = require("todolist.TodolistItem")
+local todolist_operations = require("todolist.todolistOperation")
+local ui = require("todolist.ui")
 
 M = {}
 
 local data_folder = vim.fn.stdpath("data")
-M.data_path = data_folder .. "/checklist_data.json"
+M.data_path = data_folder .. "/todolist_data.json"
 
 M.data = {}
 M.display_data = {}
@@ -21,10 +21,10 @@ local load_data = function()
 	end
 	if (data ~= nil) then
 		for _, item in ipairs(data) do
-			local checklist_item = ChecklistItem:initialize(
+			local todolist_item = TodolistItem:initialize(
 				item
 			)
-			table.insert(M.data, checklist_item)
+			table.insert(M.data, todolist_item)
 		end
 	end
 end
@@ -64,35 +64,35 @@ local set_display_data = function(filter_criteria)
 end
 
 M.save_data = function()
-	checklist_operations.save_todos_to_storage(M.data_path)
+	todolist_operations.save_todos_to_storage(M.data_path)
 end
 
-function M.checklist_add()
-	checklist_operations.add_todo()
+function M.todolist_add()
+	todolist_operations.add_todo()
 	M.save_data()
 end
 
-function M.checklist_show_all()
+function M.todolist_show_all()
 	set_display_data(nil)
 	ui.open()
 end
 
-function M.checklist_show_file()
+function M.todolist_show_file()
 	set_display_data("file")
 	ui.open()
 end
 
-function M.checklist_show_project()
+function M.todolist_show_project()
 	set_display_data("project")
 	ui.open()
 end
 
 M.setup = function(config)
 	load_data()
-	vim.keymap.set("n", config.add_todo, M.checklist_add)
-	vim.keymap.set("n", config.show_todo_all, M.checklist_show_all)
-	vim.keymap.set("n", config.show_todo_file, M.checklist_show_file)
-	vim.keymap.set("n", config.show_todo_project, M.checklist_show_project)
+	vim.keymap.set("n", config.add_todo, M.todolist_add)
+	vim.keymap.set("n", config.show_todo_all, M.todolist_show_all)
+	vim.keymap.set("n", config.show_todo_file, M.todolist_show_file)
+	vim.keymap.set("n", config.show_todo_project, M.todolist_show_project)
 end
 
 local config = {

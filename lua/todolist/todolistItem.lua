@@ -8,7 +8,7 @@ local function uuid()
 	end)
 end
 
-ChecklistItem = {
+TodoListItem = {
 	id = nil,
 	description = nil,
 	file_path = nil,
@@ -16,7 +16,7 @@ ChecklistItem = {
 	completed = nil
 }
 
-function ChecklistItem:newItem(description)
+function TodoListItem:newItem(description)
 	local o = {}
 	o.id = uuid()
 	o.description = description
@@ -28,18 +28,18 @@ function ChecklistItem:newItem(description)
 	return o
 end
 
-function ChecklistItem:initialize(o)
+function TodoListItem:initialize(o)
 	o = o or {}
 	setmetatable(o, self)
 	self.__index = self
 	return o
 end
 
-function ChecklistItem:complete_task()
+function TodoListItem:complete_task()
 	self.completed = true
 end
 
-function ChecklistItem:get_item()
+function TodoListItem:get_item()
 	return {
 		id = self.id,
 		description = self.description,
@@ -49,4 +49,4 @@ function ChecklistItem:get_item()
 	}
 end
 
-return ChecklistItem
+return TodoListItem
