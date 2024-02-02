@@ -11,7 +11,7 @@ When you are working on a project and want to note something and come back to it
 3. marka todo as completed
 4. delete a todo
 
-### Display all todos
+### Add todos
 <img src="./assets/add_todo.png" height="400" width="300">
 
 ### Display all todos
