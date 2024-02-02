@@ -11,17 +11,20 @@ When you are working on a project and want to note something and come back to it
 3. marka todo as completed
 4. delete a todo
 
-### Add todos
-<img src="./assets/add_todo.png" height="400" width="300">
+### Add todo (\<Leader\>at)
+<img src="./assets/add_todo.png" alt="Add todo" height="400" width="300">
 
-### Display all todos
-<img src="./assets/all_todos.png" width="600" height="400">
+### Display all todos (\<Leader\>t)
+<img src="./assets/all_todos.png" alt="Diplay all todos" width="600" height="400">
 
-### Display current file related todos
-<img src="./assets/file_todos.png" alt="Display File Related Todos" width="600" height="400">
+### Display current file related todos (\<Leader\>ft)
+<img src="./assets/file_todos.png" alt="Display file related todos" width="600" height="400">
 
-### Display current project related todos
-<img src="./assets/project_todos.png" alt="Display All Todos" width="600" height="400">
+### Display current project related todos (\<Leader\>pt)
+<img src="./assets/project_todos.png" alt="Display project related todos" width="600" height="400">
+
+### Toggle completed status(c when inside todo window)
+<img src="./assets/toggle_completed_status.png" alt="Toggle completed status" width="600" height="400">
 
 ## Installation:
 
