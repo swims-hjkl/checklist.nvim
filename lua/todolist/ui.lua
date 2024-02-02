@@ -79,9 +79,17 @@ M.delete_item = function()
 	end
 end
 
-local create_window = function(buffernr, start_line, start_col)
+local create_window = function(buffernr, start_line, start_col, width, height)
 	local win_id = vim.api.nvim_open_win(buffernr, true,
-		{ relative = "editor", row = start_line, col = start_col, width = 60, height = 30, border = 'rounded' })
+		{
+			relative = "editor",
+			row = start_line,
+			col = start_col,
+			width = width,
+			height = height,
+			border =
+			'rounded'
+		})
 	vim.api.nvim_win_set_option(win_id, "number", false)
 	vim.api.nvim_win_set_option(win_id, "relativenumber", false)
 	vim.cmd(
@@ -95,7 +103,16 @@ end
 
 M.open = function()
 	local buffernr = create_buffer()
-	local win_id = create_window(buffernr, 10, 50)
+	UIBufferId = buffernr
+	local curr_win = vim.api.nvim_get_current_win()
+	local curr_win_width = vim.api.nvim_win_get_width(curr_win)
+	local curr_win_height = vim.api.nvim_win_get_height(curr_win)
+	local start_col = math.floor(curr_win_width * (25 / 100))
+	local width = math.floor(curr_win_width * (50 / 100))
+	local start_line = math.floor(curr_win_height * (5 / 100))
+	local height = math.floor(curr_win_height * (75 / 100))
+	local win_id = create_window(buffernr, start_line, start_col, width, height)
+	UIWindowId = win_id
 	populate_ui()
 end
 

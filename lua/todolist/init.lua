@@ -13,6 +13,7 @@ M.display_data = {}
 
 
 local load_data = function()
+	M.data = {}
 	local data = nil
 	if (vim.fn.filereadable(M.data_path) == 0) then
 		data = path.new(M.data_path):write(vim.fn.json_encode(M.data), "w")
