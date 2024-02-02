@@ -1,6 +1,6 @@
 local path = require("plenary.path")
 local TodolistItem = require("todolist.TodolistItem")
-local todolist_operations = require("todolist.todolistOperation")
+local todolist_operations = require("todolist.todolistOperations")
 local ui = require("todolist.ui")
 
 M = {}
