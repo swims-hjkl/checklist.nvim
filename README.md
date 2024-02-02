@@ -12,16 +12,16 @@ When you are working on a project and want to note something and come back to it
 4. delete a todo
 
 ### Display all todos
-![all todos](./assets/add_todo.png "AddATodo" =300x400)
+<img src="./assets/add_todo.png" height="400" width="300">
 
 ### Display all todos
-![all todos](./assets/all_todos.png "DisplayAllTodos" =600x400)
+<img src="./assets/all_todos.png" width="600" height="400">
 
 ### Display current file related todos
-![all todos](./assets/file_todos.png "DisplayFileRelatedTodos" =600x400)
+<img src="./assets/file_todos.png" alt="Display File Related Todos" width="600" height="400">
 
 ### Display current project related todos
-![all todos](./assets/project_todos.png "DisplayAllTodos" =600x400)
+<img src="./assets/project_todos.png" alt="Display All Todos" width="600" height="400">
 
 ## Installation:
 
