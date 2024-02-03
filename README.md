@@ -43,6 +43,7 @@ require("todolist")
 ```
 ### Plug
 ```
+Plug 'nvim-lua/plenary.nvim'
 Plug 'swims-hjkl/todolist.nvim'
 require("todolist")
 ```
