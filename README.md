@@ -28,16 +28,23 @@ When you are working on a project and want to note something and come back to it
 
 ## Installation:
 
+### Lazy
+
 ```lua
-  {
-    'swims-hjkl/todolist.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    }
-  },
+{
+  'swims-hjkl/todolist.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  }
+},
 
 
-  require("todolist")
+require("todolist")
+```
+### Plug
+```
+Plug 'swims-hjkl/todolist.nvim'
+require("todolist")
 ```
 
 ## Keymaps
